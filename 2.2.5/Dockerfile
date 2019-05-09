@@ -7,6 +7,7 @@ ENV VERSION  tags/v2.2.5
 RUN apk update \
     && apk upgrade \
     # need for ocsp stapling \
+    && apk add -U curl \
     && apk add -U perl openssl \
     # just needed since v2
     && apk add -U libstdc++ \
