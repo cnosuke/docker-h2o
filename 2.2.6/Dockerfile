@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.10
 MAINTAINER cnosuke
 
 ENV URL     https://github.com/h2o/h2o.git
@@ -8,7 +8,7 @@ RUN apk update \
     && apk upgrade \
     # need for ocsp stapling \
     && apk add -U curl \
-    && apk add -U perl openssl \
+    && apk add -U perl openssl openssl-dev \
     # just needed since v2
     && apk add -U libstdc++ \
     # save state before installed packages for building \
@@ -36,7 +36,7 @@ RUN apk update \
     && rm -rf h2o \
     # remove packages installed just for building \
     && grep ^P /lib/apk/db/installed | sed -e 's#^P:##g' | sort > /after \
-    && diff /before /after | grep -e "^+[^+]" | sed -e 's#+##g' | xargs -n1 apk del \
+    && diff /before /after | grep -e "^+[^+]" | sed -e 's#+##g' | xargs -n1 apk del || echo 'ok' \
     && rm /before /after \
     && rm -rf /var/cache/apk/* \
     # just test it \
